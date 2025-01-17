@@ -6,6 +6,7 @@ CHANGELOG
 
  * Add support for `non-positive-int`, `non-negative-int` and `non-zero-int` PHPStan types to `PhpStanExtractor`
  * Add `PropertyDescriptionExtractorInterface` to `PhpStanExtractor`
+ * Add support for getting description from constructor with promoted arguments to `PhpDocExtractor`
 
 7.1
 ---

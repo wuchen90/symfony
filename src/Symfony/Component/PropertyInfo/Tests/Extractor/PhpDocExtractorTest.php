@@ -19,6 +19,7 @@ use Symfony\Component\PropertyInfo\Tests\Fixtures\DockBlockFallback;
 use Symfony\Component\PropertyInfo\Tests\Fixtures\Dummy;
 use Symfony\Component\PropertyInfo\Tests\Fixtures\DummyCollection;
 use Symfony\Component\PropertyInfo\Tests\Fixtures\InvalidDummy;
+use Symfony\Component\PropertyInfo\Tests\Fixtures\Extractor\PromotedPropertiesWithDocBlock;
 use Symfony\Component\PropertyInfo\Tests\Fixtures\ParentDummy;
 use Symfony\Component\PropertyInfo\Tests\Fixtures\Php80Dummy;
 use Symfony\Component\PropertyInfo\Tests\Fixtures\PseudoTypeDummy;
@@ -888,6 +889,23 @@ class PhpDocExtractorTest extends TestCase
     {
         yield ['promoted', null];
         yield ['promotedAndMutated', Type::string()];
+    }
+
+    /**
+     * @dataProvider provideGetShortDescriptionOnPromotedPropertyTestCases
+     */
+    public function testGetShortDescriptionOnPromotedProperty(string $class, string $property, ?string $description)
+    {
+        $this->assertSame($description, $this->extractor->getShortDescription($class, $property));
+    }
+
+    public static function provideGetShortDescriptionOnPromotedPropertyTestCases(): array
+    {
+        return [
+            [PromotedPropertiesWithDocBlock::class, 'foo', 'Just a foo property'],
+            [PromotedPropertiesWithDocBlock::class, 'bar', 'A phpdoc without type'],
+            'Inlined phpdoc with @var is not compatible with the one above constructor' => [PromotedPropertiesWithDocBlock::class, 'baz', null],
+        ];
     }
 }
 

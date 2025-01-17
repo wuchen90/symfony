@@ -102,6 +102,18 @@ class PhpDocExtractor implements PropertyDescriptionExtractorInterface, Property
             }
         }
 
+        foreach ($docBlock->getTagsByName('param') as $param) {
+            if (!$param instanceof DocBlock\Tags\Param) {
+                continue;
+            }
+
+            $paramDescription = $param->getDescription()?->render();
+
+            if (null !== $paramDescription && '' !== $paramDescription) {
+                return $paramDescription;
+            }
+        }
+
         return null;
     }
 
